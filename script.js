@@ -1,5 +1,6 @@
 const huPlayer = "O";
 const aiPlayer = "X";
+let currPlayer = "O"; // For two-player mode
 const winCombos = [
   [0, 1, 2],
   [3, 4, 5],
@@ -11,26 +12,52 @@ const winCombos = [
   [2, 4, 6]
 ];
 let origBoard;
+let gamemode = "";
 
 const cells = document.querySelectorAll(".cell");
 
-startGame();
+// Function to open the mode selection modal
+function selectMode() {
+  const modal = document.getElementById("modeModal");
+  modal.style.display = "block";
+}
+
+window.onload = selectMode;
+
+// Function to set the game mode based on user selection
+function setMode(mode) {
+  const modal = document.getElementById("modeModal");
+  modal.style.display = "none";
+  gamemode = mode;
+  startGame();
+}
 
 function startGame() {
   document.querySelector(".endgame").style.display = "none";
   origBoard = Array.from(Array(9).keys());
   cells.forEach((el) => {
     el.innerText = "";
-    el.style.removeProperty("background-color");
+    el.classList.remove("winning"); // Remove winning class
     el.addEventListener("click", turnClick, false);
   });
 }
 
 function turnClick(square) {
   if (typeof origBoard[square.target.id] === "number") {
-    turn(square.target.id, huPlayer);
-    if (!checkTie() && !checkWin(origBoard, huPlayer))
-      turn(bestSpot(), aiPlayer);
+    turn(square.target.id, currPlayer);
+    if (!checkWin(origBoard, currPlayer)) {
+      if (gamemode === "two") {
+        if (checkTie()) {
+          declareWinner("Pareggio!");
+        } else {
+          currPlayer = (currPlayer === "O") ? "X" : "O";
+        }
+      } else if (gamemode === "single" && !checkTie()) {
+        setTimeout(() => {
+          turn(bestSpot(), aiPlayer);
+        }, 200);
+      }
+    }
   }
 }
 
@@ -57,7 +84,7 @@ function gameOver(gameWon) {
   winCombos.forEach(win => {
     if (win.every(el => origBoard[el] === gameWon.player)) {
       win.forEach(index => {
-        document.getElementById(index).style.backgroundColor = gameWon.player === huPlayer ? "blue" : "red";
+        document.getElementById(index).classList.add("winning"); // Add winning class
       });
     }
   });
@@ -85,7 +112,6 @@ function bestSpot() {
 function checkTie() {
   if (emptySpots().length === 0) {
     cells.forEach(el => {
-      el.style.backgroundColor = "green";
       el.removeEventListener("click", turnClick, false);
     });
     declareWinner("Pareggio!");
