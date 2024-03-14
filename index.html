@@ -6,6 +6,15 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+  <!-- Modal for selecting game mode -->
+  <div id="modeModal" class="modal">
+    <div class="modal-content">
+      <p>Seleziona modalità di gioco:</p>
+      <button onclick="setMode('single')">Gioca contro Pepper</button>
+      <button onclick="setMode('two')">Gioca con un amico</button>
+    </div>
+  </div>
+
   <table>
     <tr>
       <td id="0" class="cell"></td>
@@ -26,8 +35,9 @@
 
   <div class="endgame">
     <div class="text"></div>
+    <button onclick="selectMode()">Rigioca</button>
   </div>
-  <button onclick="startGame()">Rigioca</button>
+
   <script src="./script.js"></script>
 </body>
 </html>
