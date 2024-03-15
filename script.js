@@ -9,7 +9,7 @@ const winCombos = [
   [1, 4, 7],
   [2, 5, 8],
   [0, 4, 8],
-  [2, 4, 6]
+  [2, 4, 6],
 ];
 let origBoard;
 let gamemode = "";
@@ -50,7 +50,7 @@ function turnClick(square) {
         if (checkTie()) {
           declareWinner("Pareggio!");
         } else {
-          currPlayer = (currPlayer === "O") ? "X" : "O";
+          currPlayer = currPlayer === "O" ? "X" : "O";
         }
       } else if (gamemode === "single" && !checkTie()) {
         setTimeout(() => {
@@ -69,11 +69,13 @@ function turn(squareId, player) {
 }
 
 function checkWin(board, player) {
-  let plays = board.reduce((a, el, index) =>
-    el === player ? a.concat(index) : a, []);
+  let plays = board.reduce(
+    (a, el, index) => (el === player ? a.concat(index) : a),
+    []
+  );
 
   for (let win of winCombos) {
-    if (win.every(el => plays.indexOf(el) > -1)) {
+    if (win.every((el) => plays.indexOf(el) > -1)) {
       return { player: player };
     }
   }
@@ -81,28 +83,30 @@ function checkWin(board, player) {
 }
 
 function gameOver(gameWon) {
-  winCombos.forEach(win => {
-    if (win.every(el => origBoard[el] === gameWon.player)) {
-      win.forEach(index => {
+  winCombos.forEach((win) => {
+    if (win.every((el) => origBoard[el] === gameWon.player)) {
+      win.forEach((index) => {
         document.getElementById(index).classList.add("winning"); // Add winning class
       });
     }
   });
 
-  cells.forEach(el => {
+  cells.forEach((el) => {
     el.removeEventListener("click", turnClick, false);
   });
+
+  if (gameWon.player === "X") pepperWon();
 
   declareWinner(`${gameWon.player} ha vinto!`);
 }
 
 function declareWinner(who) {
-  document.querySelector('.endgame').style.display = "block";
-  document.querySelector('.endgame .text').innerHTML = who;
+  document.querySelector(".endgame").style.display = "block";
+  document.querySelector(".endgame .text").innerHTML = who;
 }
 
 function emptySpots() {
-  return origBoard.filter(el => typeof el === "number");
+  return origBoard.filter((el) => typeof el === "number");
 }
 
 function bestSpot() {
@@ -111,7 +115,7 @@ function bestSpot() {
 
 function checkTie() {
   if (emptySpots().length === 0) {
-    cells.forEach(el => {
+    cells.forEach((el) => {
       el.removeEventListener("click", turnClick, false);
     });
     declareWinner("Pareggio!");
@@ -154,7 +158,7 @@ function minmax(newBoard, player) {
   let bestMove;
   if (player === aiPlayer) {
     let bestScore = -10000;
-    moves.forEach(el => {
+    moves.forEach((el) => {
       if (el.score > bestScore) {
         bestScore = el.score;
         bestMove = el;
@@ -162,7 +166,7 @@ function minmax(newBoard, player) {
     });
   } else {
     let bestScore = 10000;
-    moves.forEach(el => {
+    moves.forEach((el) => {
       if (el.score < bestScore) {
         bestScore = el.score;
         bestMove = el;
@@ -170,4 +174,23 @@ function minmax(newBoard, player) {
     });
   }
   return bestMove;
+}
+
+session = null;
+QiSession(connected, disconnected, location.host);
+
+function connected(s) {
+  console.log("Session connected");
+  session = s;
+  //If you want to subscribe so some events (to send info pepper->tablet) call the function here
+}
+
+function disconnected(error) {
+  console.log("Session disconnected");
+}
+
+function pepperWon() {
+  session.service("ALMemory").then(function (memory) {
+    memory.raiseEvent("pepperWon", "1");
+  });
 }
