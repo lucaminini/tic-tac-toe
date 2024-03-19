@@ -14,6 +14,8 @@ const winCombos = [
 let origBoard;
 let gamemode = "";
 
+alert('ciao');
+
 const cells = document.querySelectorAll(".cell");
 
 // Function to open the mode selection modal
@@ -43,7 +45,6 @@ function startGame() {
 }
 
 function turnClick(square) {
-  alert("Ciaoooo");
   if (typeof origBoard[square.target.id] === "number") {
     turn(square.target.id, currPlayer);
     if (!checkWin(origBoard, currPlayer)) {
