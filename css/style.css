@@ -1,0 +1,104 @@
+/* Update cell appearance */
+.cell {
+  border: 2px solid #333;
+  height: 100px;
+  width: 100px;
+  text-align: center;
+  vertical-align: middle;
+  font-family: "Arial", sans-serif;
+  font-size: 50px; /* Adjust font size */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Add transition effect */
+}
+
+/* Hover effect for cells */
+.cell:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Light gray background on hover */
+}
+
+/* Winning combination effect */
+.cell.winning {
+  background-color: rgba(255, 215, 0, 0.5); /* Yellow semi-transparent background for winning cells */
+}
+
+/* Game board appearance */
+table {
+  border-collapse: collapse;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px; /* Add border radius to the game board */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+}
+
+table tr:first-child td {
+  border-top: none;
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+table tr td:first-child {
+  border-left: none;
+}
+
+table tr td:last-child {
+  border-right: none;
+}
+
+/* End game popup */
+.endgame {
+  display: none;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  color: white;
+  font-size: 1.5rem; /* Adjust font size */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Add glow effect */
+}
+
+/* Mode selection modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 200px;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.modal button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px; /* Add button border radius */
+  border: none; /* Remove button border */
+  background-color: #007bff; /* Blue button background */
+  color: white; /* Button text color */
+  transition: background-color 0.3s ease; /* Add transition effect */
+}
+
+.modal button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
